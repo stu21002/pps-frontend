@@ -23,6 +23,9 @@ const NavBar = () => {
               <Link onClick={()=>setPage("Gallery")} href="/gallery" className="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-sm font-medium">
                   Gallery
               </Link>
+              <Link onClick={()=>setPage("Upload")} href="/upload" className="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-sm font-medium">
+              Upload
+              </Link>
             </div>
           </div>
           <div className="-mr-2 flex md:hidden">
@@ -55,6 +58,9 @@ const NavBar = () => {
             </Link>
             <Link onClick={()=>setPage("Gallery")} href="/gallery" className="text-white hover:bg-blue-500 block px-3 py-2 rounded-md text-base font-medium">
                 Gallery
+            </Link>
+            <Link onClick={()=>setPage("Upload")} href="/upload"  className="text-white hover:bg-blue-500 block px-3 py-2 rounded-md text-base font-medium">
+              Upload
             </Link>
           </div>
         </div>
