@@ -1,26 +1,25 @@
 "use client";
 import React, { useState, useRef } from "react";
 
-const DEFAULT_FOLDER_INFO = {
-  name: 'None selected',
+const DEFAULT_FILE_INFO = {
   size: 0,
   fileCount: 0,
 }
 
-export default function FolderPage() {
+export default function FilePage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [files, setFiles] = useState<FileList | undefined>(undefined);
-  const [folderStats, setFolderStats] = useState<{ name: string; size: number; fileCount: number }>(DEFAULT_FOLDER_INFO);
+  const [fileStats, setFileStats] = useState<{size: number; fileCount: number }>(DEFAULT_FILE_INFO);
 
 
-  const handleFolderSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
     if (selectedFiles) {
       setFiles(selectedFiles);
 
       let totalSize = 0;
       let fileCount = 0;
-      let folderName = '';
+      // let folderName = '';
 
       Array.from(selectedFiles).forEach((file) => {
         // Accumulate total size
@@ -28,17 +27,11 @@ export default function FolderPage() {
         fileCount += 1;
 
         // Get the folder name from webkitRelativePath if available
-        if (file.webkitRelativePath) {
-          const parts = file.webkitRelativePath.split('/');
-          if (parts.length > 1) {
-            folderName = parts[0]; // Get the folder name (first part of the path)
-          }
-        }
+       
       });
 
       // Update the stats
-      setFolderStats({
-        name: folderName || 'Unknown Folder',
+      setFileStats({
         size: totalSize,
         fileCount: fileCount,
       });
@@ -51,22 +44,21 @@ export default function FolderPage() {
 
   const handleUploadClick = () => {
     console.log("Files uploaded")
-    setFolderStats(DEFAULT_FOLDER_INFO)
+    setFileStats(DEFAULT_FILE_INFO)
     setFiles(undefined)
   }
 
   return (
-    <div className="sm:flex sm:justify-center flex-row p-4 gap-4">
+    <div className="flex sm:flex-row sm:justify-center p-4 gap-4">
       {/* Folder Selection */}
       <div className="sm:basis-2/5 text-center p-4 flex justify-center rounded-md shadow-md">
         <div className="flex flex-row space-x-6 gap-8">
           {/* Folder Stats Section */}
           <div className="text-left">
-            <h3>Folder Stats:</h3>
-            <p><strong>Folder Name:</strong> {folderStats.name}</p>
-            <p><strong>Total Files:</strong> {folderStats.fileCount}</p>
+            <h3 className="mb-2">Upload Stats:</h3>
+            <p><strong>Total Files:</strong> {fileStats.fileCount}</p>
             <p><strong>Total Size:</strong> {
-            Math.round((folderStats.size /1024/1024/1024)*100)/100
+            Math.round((fileStats.size /1024/1024/1024)*100)/100
             } G</p>
           </div>
 
@@ -77,15 +69,14 @@ export default function FolderPage() {
               onClick={handleButtonClick}
               className="px-4 py-2 bg-blue-500 text-white rounded-md"
             >
-              Select Folder
+              Select Files
             </button>
 
             <input
               ref={fileInputRef}
               type="file"
-              onChange={handleFolderSelect}
+              onChange={handleFileSelect}
               multiple
-              webkitdirectory="true" // Enables folder selection
               className="hidden"
             />
 
@@ -93,9 +84,9 @@ export default function FolderPage() {
             <button
               onClick={handleUploadClick}
               className={`px-4 py-2 rounded-md ${
-                folderStats.fileCount ? 'bg-blue-500' : 'bg-gray-400 cursor-not-allowed'
+                fileStats.fileCount ? 'bg-blue-500' : 'bg-gray-400 cursor-not-allowed'
               } text-white`}
-              disabled={!folderStats.fileCount}
+              disabled={!fileStats.fileCount}
             >
               Upload
             </button>
